@@ -1,8 +1,3 @@
-print()
-print("------------")
-print ("Expense Tracker")
-print()
-print("===============")
 
 
 #Initialization
@@ -22,14 +17,12 @@ def get_expense():
         return None,None
 
 
-# Main loop
+# Main loop   
 while True:
-    print()
-    print("1.) Add expense")
+
+    print("1.) Add Expense")
     print("2.) Summary")
     print("3.) Exit")
-    print()
-    print("================")
 
     # Requesting for user input
 
