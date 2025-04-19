@@ -1,5 +1,5 @@
 body {
-  background-image: url("C:\Users\jaste\PycharmProjects\PythonProject\PET\Templates\bckimg.jpg");
+  background-image: url("../img/bckimg.jpg");
   display: flex;
   justify-content: center; /* Centers horizontally */
   align-items: center; /* Centers vertically */
