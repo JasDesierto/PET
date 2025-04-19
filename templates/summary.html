@@ -6,10 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale = 1.0" />
     <!-- Ensures that the page dimension and scaling is consistent in all devices.-->
     <title>Expense Summary</title>
-    <link rel="stylesheet" href="Styles.css" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
   </head>
   <body>
     <main></main>
-    <script src="script.js"></script>
+    <!-- <script src="script.js"></script> -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   </body>
 </html>
