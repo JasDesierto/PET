@@ -28,7 +28,7 @@ Hey bro! This is what you need to know about the changes I made to the code:
    - You'll see a message saying the pull request was successfully merged
    - My code is now in the GitHub repository!
 
-3. Now, go to your project folder on your pc, open the terminal, and type: `git pull`
+3. Now on your terminal type: `git pull`
 
    - This downloads my changes to your computer
 
