@@ -63,5 +63,11 @@ def summary():
     return jsonify({"summary": finances, "total": total})
 
 
+# This new route is necessary to separate the concerns, summary for data only, and summary page for html purely for presentation
+@app.route("/summary_page", methods={"GET"})
+def summary_page():
+    return render_template("summary.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
