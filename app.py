@@ -57,9 +57,7 @@ def get_expense():
 
     if (
         month not in valid_months
-        # or short_valid_months # ? this will not work because it will always return true
-        and month
-        not in short_valid_months  # ? better logic to check for short months
+        and month not in short_valid_months  # ? better logic to check for short months
         or not isinstance(expense, (int, float))
     ):
         return jsonify({"error": "Invalid Input"}), 400
