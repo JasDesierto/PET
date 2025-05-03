@@ -1,10 +1,26 @@
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 
+# allows to access data on different addresses
 app = Flask(__name__)
 CORS(app)
 
-finances = {}
+# sqlalchemy configuration
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
+db = SQLAlchemy(app)
+
+
+# ------------------------
+# Database Model
+# -------------------------
+
+
+class Finance(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    month = db.Column(db.String(20), nullable=False)
+    expense = db.Column(db.Float, nullable=False)
+
 
 valid_months = [
     "January",
@@ -37,18 +53,13 @@ short_valid_months = [
 ]
 
 
-# ? Added this route to render the index.html file using flask
+# This route renders the index.html
 @app.route("/", methods=["GET"])
 def index():
-    # ? you need "render_template" to render the index.html file
-    # ? go to http://127.0.0.1:5000/ to on your browser to see home page
-    # ? do this instead of using vs code's live preview extension
     return render_template("index.html")
 
 
-# ! This route is not used to render the index.html file
-# ? This route handles the POST request from the expense-form in index.html
-# ? that was sent by the script.js file when the form is submitted
+# This route handles the POST request from the expense-form in index.html
 @app.route("/", methods=["POST"])
 def get_expense():
     data = request.json
@@ -57,23 +68,33 @@ def get_expense():
 
     if (
         month not in valid_months
-        and month not in short_valid_months  # ? better logic to check for short months
+        and month not in short_valid_months
         or not isinstance(expense, (int, float))
     ):
         return jsonify({"error": "Invalid Input"}), 400
 
-    if month in finances:
-        finances[month] += expense
-    else:
-        finances[month] = expense
+    # Save to DB instead of a dictionary
+    new_expense = Finance(month=month, expense=expense)
+    db.session.add(new_expense)
+    db.session.commit()
 
     return jsonify({"message": f"{expense} added to {month}."})
 
 
 @app.route("/summary", methods=["GET"])
 def summary():
-    total = sum(finances.values())
-    return jsonify({"summary": finances, "total": total})
+    all_data = Finance.query.all()
+    summary_data = {}
+    total = 0
+
+    for item in all_data:
+        if item.month in summary_data:
+            summary_data[item.month] += item.expense
+        else:
+            summary_data[item.month] = item.expense
+        total += item.expense
+
+    return jsonify({"summary": summary_data, "total": total})
 
 
 # This new route is necessary to separate the concerns, summary for data only, and summary page for html purely for presentation
@@ -83,4 +104,6 @@ def summary_page():
 
 
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
