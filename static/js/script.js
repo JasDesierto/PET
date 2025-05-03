@@ -7,6 +7,10 @@ document
   .addEventListener("submit", async function (e) {
     e.preventDefault(); //Prevents the default behavior of form submission (reloading the page)
 
+    // ------------------------------------------------------------------
+    // EXPENSE FUNCTION
+    // ------------------------------------------------------------------
+
     // Gets value from input field with ids "month" and "expense"
     const month = document.getElementById("month").value;
     const expense = parseFloat(document.getElementById("expense").value);
@@ -25,7 +29,15 @@ document
     // Displays either the error or success message from the backend
     document.getElementById("message").innerText =
       result.message || result.error;
+
+    document.getElementById("month").value = "";
+    document.getElementById("expense").value = "";
   });
+
+// ------------------------------------------------------------------
+// EXPENSE SUMMARY FUNCTION
+// ------------------------------------------------------------------
+
 // Adds a click event listener to the button with id "load-summary"
 document
   .getElementById("load-summary")

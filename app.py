@@ -22,6 +22,10 @@ class Finance(db.Model):
     expense = db.Column(db.Float, nullable=False)
 
 
+# ------------------------
+# Validations
+# ------------------------
+
 valid_months = [
     "January",
     "February",
@@ -52,8 +56,12 @@ short_valid_months = [
     "Dec",
 ]
 
+# ------------------------
+# EXPENSE INPUT
+# ------------------------
 
-# This route renders the index.html
+
+# This route renders (displays) the index.html
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
@@ -73,12 +81,26 @@ def get_expense():
     ):
         return jsonify({"error": "Invalid Input"}), 400
 
-    # Save to DB instead of a dictionary
+    # ---------------------------------------------------
+    # SAVING TO THE DB
+    # ---------------------------------------------------
+
+    # Assign values to the corresponding columns
     new_expense = Finance(month=month, expense=expense)
+    # Adds it to a queue of pending changes
     db.session.add(new_expense)
+    # Saving the changes to the database.
     db.session.commit()
 
     return jsonify({"message": f"{expense} added to {month}."})
+
+
+# ------------------------
+# EXPENSE SUMMARY
+# ------------------------
+
+
+# Logic for expense summary
 
 
 @app.route("/summary", methods=["GET"])
